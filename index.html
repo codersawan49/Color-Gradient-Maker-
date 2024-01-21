@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.3/css/bootstrap-colorpicker.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.min.css">
+
+  <style>
+    .container {
+      max-width: 800px;
+      margin-top: 50px;
+    }
+
+    .mb-3, .mb-4{
+      color: #343a40;
+      text-align: center;
+    }
+
+    #gradientContainer {
+      width: 100%;
+      height: 200px;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-top: 20px;
+      position: relative;
+    }
+
+    #gradient {
+      width: 100%;
+      height: 100%;
+      border-radius: 10px;
+      transition: background 0.3s ease;
+    }
+
+    #controls {
+      margin-top: 20px;
+    }
+
+    label {
+      margin-bottom: 5px;
+    }
+
+    #result {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    pre {
+      color: #555;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    button {
+      margin-top: 10px;
+      transition: all 0.3s;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    .card {
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+  <title>Gradient Color Combination Maker</title>
+</head>
+<body>
+
+<div class="container">
+  <h1 class="mb-4">Gradient Color Combination Maker</h1>
+
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-body">
+          <div id="gradientContainer">
+            <div id="gradient"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="controls" class="mt-4">
+    <div class="card">
+      <div class="card-body">
+        <h2 class="card-title mb-3">Controls</h2>
+        <form>
+          <div class="form-group">
+            <label for="startColor">Start Color:</label>
+            <input type="text" id="startColor" class="form-control" data-toggle="colorpicker" value="#00ff00">
+          </div>
+
+          <div class="form-group">
+            <label for="endColor">End Color:</label>
+            <input type="text" id="endColor" class="form-control" data-toggle="colorpicker" value="#ff0000">
+          </div>
+
+          <div class="form-group">
+            <label for="direction">Gradient Direction:</label>
+            <select id="direction" class="form-control">
+              <option value="to right">Left to Right</option>
+              <option value="to bottom">Top to Bottom</option>
+              <option value="to bottom right">Top Left to Bottom Right</option>
+              <option value="to top">Bottom to Top</option>
+              <option value="to left">Right to Left</option>
+              <!-- Add more gradient directions as needed -->
+            </select>
+          </div>
+
+          <button type="button" onclick="updateGradient()" class="btn btn-primary btn-block">Update Gradient</button>
+          <button type="button" onclick="generateGradientCode()" class="btn btn-success btn-block mt-2">Generate CSS Code</button>
+          <button type="button" onclick="copyToClipboard()" class="btn btn-info btn-block mt-2">Copy CSS Code</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div id="result" class="mt-4">
+    <div class="card">
+      <div class="card-body">
+        <h2 class="card-title mb-3">Result</h2>
+        <pre id="gradientCode"></pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.3/js/bootstrap-colorpicker.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+<script>
+  $(document).ready(function(){
+    $('[data-toggle="colorpicker"]').colorpicker();
+    $('#datepicker').datepicker({
+      format: 'yyyy-mm-dd',
+      autoclose: true
+    });
+  });
+
+  function updateGradient() {
+    const startColor = $('#startColor').val();
+    const endColor = $('#endColor').val();
+    const direction = $('#direction').val();
+    const gradient = `linear-gradient(${direction}, ${startColor}, ${endColor})`;
+    $('#gradient').css('background', gradient);
+  }
+
+  function generateGradientCode() {
+    const startColor = $('#startColor').val();
+    const endColor = $('#endColor').val();
+    const direction = $('#direction').val();
+    const gradientCode = `background: linear-gradient(${direction}, ${startColor}, ${endColor});`;
+    $('#gradientCode').text(gradientCode);
+  }
+
+  function copyToClipboard() {
+    const gradientCode = $('#gradientCode').text();
+    const textarea = $('<textarea>').text(gradientCode).css({position: 'absolute', left: '-9999px'}).appendTo($('body'));
+    textarea[0].select();
+    document.execCommand('copy');
+    textarea.remove();
+  }
+</script>
+
+</body>
+</html>
